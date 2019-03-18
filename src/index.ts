@@ -3,67 +3,39 @@ import './style.css'
 // three.js
 import * as THREE from 'three'
 
-// create the scene
-let scene = new THREE.Scene()
+function init(){
+	let scene = new THREE.Scene();
+		scene.background = new THREE.Color(0xababab);
 
-// create the camera
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+		// create and locate the camera
+	
+	let camera = new THREE.PerspectiveCamera(30,
+		window.innerWidth / window.innerHeight, 
+		1, 1000);
+		camera.position.z = 5;
 
-let renderer = new THREE.WebGLRenderer()
+	let renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	
+	document.body.appendChild(renderer.domElement);
 
-// set size
-renderer.setSize(window.innerWidth, window.innerHeight)
-
-// add canvas to dom
-document.body.appendChild(renderer.domElement)
-
-// add axis to the scene
-let axis = new THREE.AxesHelper(10)
-
-scene.add(axis)
-
-// add lights
-let light = new THREE.DirectionalLight(0xffffff, 1.0)
-
-light.position.set(100, 100, 100)
-
-scene.add(light)
-
-let light2 = new THREE.DirectionalLight(0xffffff, 1.0)
-
-light2.position.set(-100, 100, -100)
-
-scene.add(light2)
-
-let material = new THREE.MeshBasicMaterial({
-	color: 0xaaaaaa,
-	wireframe: true
-})
-
-// create a box and add it to the scene
-let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material)
-
-scene.add(box)
-
-box.position.x = 0.5
-box.rotation.y = 0.5
-
-camera.position.x = 5
-camera.position.y = 5
-camera.position.z = 5
-
-camera.lookAt(scene.position)
-
-function animate(): void {
-	requestAnimationFrame(animate)
-	render()
+	return { renderer, camera, scene };
 }
 
-function render(): void {
-	let timer = 0.002 * Date.now()
-	box.position.y = 0.5 + 0.5 * Math.sin(timer)
-	box.rotation.x += 0.1
-	renderer.render(scene, camera)
+let { renderer, camera, scene } = init();
+
+let mainLoop = function(){
+	type createCubeT = (x:number, y:number, z:number, color: string) => THREE.Mesh; 
+	let createCube:createCubeT = function(x:number, y:number, z:number, color: string){
+
+		let geometry = new THREE.BoxGeometry(x,y,z);
+		let material = new THREE.MeshBasicMaterial({ color });
+	}
+	
+	scene.add()
+	renderer.render(scene, camera);
+	requestAnimationFrame(mainLoop);	
 }
 
-animate()
+init();
+mainLoop();
